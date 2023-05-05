@@ -33,14 +33,16 @@ namespace Repository {
 
         function save(Spp $spp): void
         {
-           // $number = sizeof($this->todolist) + 1;
-           // $this->todolist[$number] = $todolist;
+            // $number = sizeof($this->todolist) + 1;
+            // $this->todolist[$number] = $todolist;
 
+            $no_tagihan = $this->generateNoTagihan($spp->getSpp(), $spp->getTahun(), $spp->getBulan());
+            $spp->setNoTagihan($no_tagihan);
             $this->spp[] = $spp;
 
-            $sql = "INSERT INTO spp(spp,bulan,status) VALUES (?,?,?)";
+            $sql = "INSERT INTO spp(spp,bulan,tahun,no_tagihan) VALUES (?,?,?,?)";
             $statement = $this->connection->prepare($sql);
-            $statement->execute([$spp->getSpp(), $spp->getBulan(), $spp->getStatus()]);
+            $statement->execute([$spp->getSpp(), $spp->getBulan(), $spp->getTahun(), $spp->getNoTagihan()]);
         }
 
         function remove(int $number): bool
@@ -72,25 +74,25 @@ namespace Repository {
             $sppList = array();
             while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
                 $spp = new Spp($row['spp']);
-                $spp->setID($row['id_spp']);
+                $spp->setId($row['id_spp']);
                 $spp->setBulan($row['bulan']);
-                $spp->setStatus($row['status']);
+                $spp->setTahun($row['tahun']);
+                $spp->setNoTagihan($row['no_tagihan']);
                 $sppList[] = $spp;
             }
 
             return $sppList;
         }
 
-
-        public function updateSpp(Spp $spp): bool
+        private function generateNoTagihan(int $spp, int $tahun, string $bulan): string
         {
-            $sql = "UPDATE spp SET spp = :spp, bulan = :bulan, status = :status WHERE id = :id";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(':spp', $spp->getSpp(), PDO::PARAM_INT);
-            $stmt->bindValue(':bulan', $spp->getBulan(), PDO::PARAM_STR);
-            $stmt->bindValue(':status', $spp->getStatus(), PDO::PARAM_STR);
-            $stmt->bindValue(':id', $spp->getID(), PDO::PARAM_INT);
-            return $stmt->execute();
+            $bulanInt = date_parse($bulan)['month'];
+            // generate no_tagihan from spp, tahun, and bulan
+            $no_tagihan = "INV" . str_pad($spp, 4, '0', STR_PAD_LEFT) . $tahun  . strtoupper(substr($bulan, 0, 3));
+
+//            $no_tagihan = 'INV' . str_pad($spp, 4, '0', STR_PAD_LEFT) . $tahun . str_pad($bulanInt, 2, '0', STR_PAD_LEFT);
+
+            return $no_tagihan;
         }
 
 

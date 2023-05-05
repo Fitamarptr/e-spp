@@ -8,6 +8,11 @@ require_once __DIR__ . "/../Config/Database.php";
 require_once __DIR__ . '/../Repository/SppRepository.php';
 require_once __DIR__ . '/../Service/SppService.php';
 
+?>
+
+
+
+<?php
 
 use Service\SppServiceImpl;
 use Repository\SppRepositoryImpl;
@@ -15,7 +20,7 @@ use Repository\SppRepositoryImpl;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bulan = $_POST['bulan'];
     $nominal = $_POST['nominal'];
-    $status = $_POST['status'];
+    $tahun = $_POST['tahun'];
 
 
 
@@ -23,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sppRepository = new SppRepositoryImpl($connection);
 
     $sppService = new SppServiceImpl($sppRepository);
-    $sppService->addSpp($nominal, $bulan, $status);
+    $sppService->addSpp($nominal, $bulan, $tahun);
 
     echo '<div class="alert alert-success" role="alert">Berhasil Menambah!</div>';
 //    header("Location: spp.php");
@@ -86,8 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <input type="text" class="form-control" name="bulan" id="bulan">
                                     </div>
                                     <div class="form-group">
-                                        <label for="status" class="form-label">Status</label>
-                                        <input type="text" name="status" id="status" class="form-control" required>
+                                        <label for="tahun" class="form-label">Tahun</label>
+                                        <input type="number" name="tahun" id="tahun" max="9999" class="form-control" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="nominal">Nominal</label>

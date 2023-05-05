@@ -5,14 +5,27 @@ namespace Entity {
 
     class Spp
     {
-        private int $id;
+        private int $Id;
         private int $spp;
         private string $bulan;
-        private string $status;
+        private int $tahun;
+        private string $no_tagihan;
+
 
         public function __construct(int $spp)
         {
             $this->spp = $spp;
+        }
+
+        public function getId(): int
+        {
+            return $this->Id;
+        }
+
+
+        public function setId(int $Id): void
+        {
+            $this->Id = $Id;
         }
 
         public function getSpp(): int
@@ -23,16 +36,6 @@ namespace Entity {
         public function setSpp(int $spp): void
         {
             $this->spp = $spp;
-        }
-
-        public function getID(): int
-        {
-            return $this->id;
-        }
-
-        public function setID(int $id): void
-        {
-            $this->id = $id;
         }
 
 
@@ -46,15 +49,26 @@ namespace Entity {
             $this->bulan = $bulan;
         }
 
-        public function getStatus(): string
+        public function getTahun(): int
         {
-            return $this->status;
+            return $this->tahun;
         }
 
-        public function setStatus(string $status): void
+        public function setTahun(int $tahun): void
         {
-            $this->status = $status;
+            $this->tahun = $tahun;
         }
+
+        public function getNoTagihan(): string
+        {
+            return $this->no_tagihan;
+        }
+
+        public function setNoTagihan(string $no_tagihan): void
+        {
+            $this->no_tagihan = $no_tagihan;
+        }
+
 
 
 

@@ -72,7 +72,7 @@ $sppList = $sppService->showSpp();
 
                 <!-- Content Row -->
                 <div class="row">
-                    <div class="col-lg-6 mb-4">
+                    <div class="col-lg-10 mb-4">
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <!-- <h6 class="m-0 font-weight-bold text-primary">SPP</h6> -->
@@ -82,35 +82,33 @@ $sppList = $sppService->showSpp();
                             </div>
                             <div class="card-body">
                                 <table class="table table-striped">
-                                     <thead>
-                                     <tr>
+                                    <thead>
+                                    <tr>
                                         <th>No</th>
-                                        <th>SPP</th>
+                                        <th>Nominal</th>
                                         <th>Bulan</th>
-                                        <th>Status</th>
+                                        <th>Tahun</th>
+                                        <th>No Tagihan</th>
                                         <th>Action</th>
                                     </tr>
-                                     </thead>
-                                        <tbody>
-                                            <?php foreach ($sppList as $number => $spp) { ?>
-                                                <tr>
-                                                <td><?php echo $number += 1 ?></td>
-                                                <td><?php echo $spp->getSpp() ?></td>
-                                                <td><?php echo $spp->getBulan() ?></td>
-                                                <td><?php echo $spp->getStatus() ?></td>
-                                                <td>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach ($sppList as $number => $spp) { ?>
+                                        <tr>
+                                            <td><?php echo $number += 1 ?></td>
+                                            <td><?php echo $spp->getSpp() ?></td>
+                                            <td><?php echo $spp->getBulan() ?></td>
+                                            <td><?php echo $spp->getTahun() ?></td>
+                                            <td><?php echo $spp->getNoTagihan() ?></td>
+                                            <td>
                                                 <form method="POST" action="removeSpp.php">
-                                                <button class="btn btn-danger" name ="delete"><i class="fas fa-trash"></i> Hapus</button>
-                                                <input type="hidden" name="id" value="<?php echo $spp->getID(); ?>">
+                                                    <button class="btn btn-danger" name ="delete"><i class="fas fa-trash"></i> Hapus</button>
+                                                    <input type="hidden" name="id" value="<?php echo $spp->getId(); ?>">
                                                 </form>
-                                                <form method="GET" action="editSpp.php">
-                                                    <input type="hidden" name="id" value="<?php echo $spp->getID(); ?>">
-                                                    <button class="btn btn-primary" name="edit"><i class="fas fa-edit"></i> Edit</button>
-                                                </form>
-                                                </td>
-                                                </tr>
-                                            <?php } ?>
-                                        </tbody>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

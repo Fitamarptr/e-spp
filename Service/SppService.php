@@ -8,7 +8,7 @@ namespace Service {
     interface SppService
     {
         function showSpp(): array;
-        function addSpp(int $spp, string $bulan, int $tahun): void;
+        function addSpp(int $spp, string $bulan, int $tahun, int $golongan): void;
         function removeSpp(int $number): bool;
 //        public function updateSpp(Spp $spp): bool;
 
@@ -31,11 +31,12 @@ namespace Service {
             return $sppList;
         }
 
-        public function addSpp(int $spp, string $bulan, int $tahun): void
+        public function addSpp(int $spp, string $bulan, int $tahun, int $golongan): void
         {
             $newSpp = new Spp($spp);
             $newSpp->setBulan($bulan);
             $newSpp->setTahun($tahun);
+            $newSpp->setGolongan($golongan);
             $this->sppRepository->save($newSpp);
         }
 

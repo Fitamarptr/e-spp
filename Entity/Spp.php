@@ -9,7 +9,7 @@ namespace Entity {
         private int $spp;
         private string $bulan;
         private int $tahun;
-        private string $no_tagihan;
+        private int $golongan;
 
 
         public function __construct(int $spp)
@@ -59,15 +59,17 @@ namespace Entity {
             $this->tahun = $tahun;
         }
 
-        public function getNoTagihan(): string
+        public function getGolongan(): int
         {
-            return $this->no_tagihan;
+            return $this->golongan;
         }
 
-        public function setNoTagihan(string $no_tagihan): void
+        public function setGolongan(int $golongan): void
         {
-            $this->no_tagihan = $no_tagihan;
+            $this->golongan = $golongan;
         }
+
+
 
 
 

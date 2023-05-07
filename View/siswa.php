@@ -2,36 +2,21 @@
 
 
 require_once __DIR__ .  '/../layouts/header.php';
-require_once __DIR__ . '/../Entity/Spp.php';
+require_once __DIR__ . '/../Entity/Siswa.php';
 require_once __DIR__ . "/../Config/Database.php";
-require_once __DIR__ . '/../Repository/SppRepository.php';
-require_once __DIR__ . '/../Service/SppService.php';
+require_once __DIR__ . '/../Repository/SiswaRepository.php';
+require_once __DIR__ . '/../Service/SiswaService.php';
 
-use Service\SppServiceImpl;
-use Repository\SppRepositoryImpl;
-use Entity\Spp;
+use Service\SiswaServiceImpl;
+use Repository\SiswaRepositoryImpl;
+use Entity\Siswa;
 
 
 $connection = Config\Database::getConnection();
-$sppRepository = new SppRepositoryImpl($connection);
+$siswaRepository = new SiswaRepositoryImpl($connection);
 
-$sppService = new SppServiceImpl($sppRepository);
-$sppList = $sppService->showSpp();
-
-
-//if (isset($_POST['delete'])) {
-//    $id = $_POST['id'];
-//    $result = $sppService->removeSpp($id);
-//    if ($result) {
-//        echo "Data with ID $id has been deleted successfully.";
-//    } else {
-//        echo "Failed to delete data with ID $id.";
-//    }
-//}
-//
-//if (isset($_GET['id'])) {
-//    $id = $_GET['id'];
-//}
+$siswaService = new SiswaServiceImpl($siswaRepository);
+$siswaList = $siswaService->showSiswa();
 
 
 
@@ -67,7 +52,7 @@ $sppList = $sppService->showSpp();
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">SPP</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Siswa</h1>
                 </div>
 
                 <!-- Content Row -->
@@ -76,8 +61,8 @@ $sppList = $sppService->showSpp();
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <!-- <h6 class="m-0 font-weight-bold text-primary">SPP</h6> -->
-                                <a href="addSpp.php" class="btn btn-primary">
-                                    <i class="fas fa-plus"></i> Tambah SPP
+                                <a href="addSiswa.php" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Tambah Siswa
                                 </a>
                             </div>
                             <div class="card-body">
@@ -85,25 +70,25 @@ $sppList = $sppService->showSpp();
                                     <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nominal</th>
-                                        <th>Bulan</th>
-                                        <th>Tahun</th>
+                                        <th>Siswa</th>
+                                        <th>NIS</th>
+                                        <th>Kelas</th>
                                         <th>Golongan</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach ($sppList as $number => $spp) { ?>
+                                    <?php foreach ($siswaList as $number => $siswa) { ?>
                                         <tr>
                                             <td><?php echo $number += 1 ?></td>
-                                            <td><?php echo $spp->getSpp() ?></td>
-                                            <td><?php echo $spp->getBulan() ?></td>
-                                            <td><?php echo $spp->getTahun() ?></td>
-                                            <td><?php echo $spp->getGolongan() ?></td>
+                                            <td><?php echo $siswa->getSiswa() ?></td>
+                                            <td><?php echo $siswa->getNis() ?></td>
+                                            <td><?php echo $siswa->getKelas() ?></td>
+                                            <td><?php echo $siswa->getGolongan() ?></td>
                                             <td>
-                                                <form method="POST" action="removeSpp.php" style="display: inline-block">
-                                                    <button class="btn btn-danger" name ="delete" onclick="return confirm('Anda yakin akan menghapus data siswa ini?"><i class="fas fa-trash"></i> Hapus</button>
-                                                    <input type="hidden" name="id" value="<?php echo $spp->getId(); ?>">
+                                                <form method="POST" action="removeSiswa.php">
+                                                    <button class="btn btn-danger" name ="delete"><i class="fas fa-trash"></i> Hapus</button>
+                                                    <input type="hidden" name="id" value="<?php echo $siswa->getId(); ?>">
                                                 </form>
                                             </td>
                                         </tr>

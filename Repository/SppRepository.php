@@ -13,10 +13,6 @@ namespace Repository {
 
         function findAll(): array;
 
-//        function update(int $id, Spp $newSpp): bool;
-//
-//        public function findById(int $id): ?Spp;
-
     }
 
     class SppRepositoryImpl implements SppRepository {
@@ -33,16 +29,11 @@ namespace Repository {
 
         function save(Spp $spp): void
         {
-            // $number = sizeof($this->todolist) + 1;
-            // $this->todolist[$number] = $todolist;
-
-            $no_tagihan = $this->generateNoTagihan($spp->getSpp(), $spp->getTahun(), $spp->getBulan());
-            $spp->setNoTagihan($no_tagihan);
             $this->spp[] = $spp;
 
-            $sql = "INSERT INTO spp(spp,bulan,tahun,no_tagihan) VALUES (?,?,?,?)";
+            $sql = "INSERT INTO spp(spp,bulan,tahun,golongan) VALUES (?,?,?,?)";
             $statement = $this->connection->prepare($sql);
-            $statement->execute([$spp->getSpp(), $spp->getBulan(), $spp->getTahun(), $spp->getNoTagihan()]);
+            $statement->execute([$spp->getSpp(), $spp->getBulan(), $spp->getTahun(), $spp->getGolongan()]);
         }
 
         function remove(int $number): bool
@@ -77,23 +68,14 @@ namespace Repository {
                 $spp->setId($row['id_spp']);
                 $spp->setBulan($row['bulan']);
                 $spp->setTahun($row['tahun']);
-                $spp->setNoTagihan($row['no_tagihan']);
+                $spp->setGolongan($row['golongan']);
                 $sppList[] = $spp;
             }
 
             return $sppList;
         }
 
-        private function generateNoTagihan(int $spp, int $tahun, string $bulan): string
-        {
-            $bulanInt = date_parse($bulan)['month'];
-            // generate no_tagihan from spp, tahun, and bulan
-            $no_tagihan = "INV" . str_pad($spp, 4, '0', STR_PAD_LEFT) . $tahun  . strtoupper(substr($bulan, 0, 3));
 
-//            $no_tagihan = 'INV' . str_pad($spp, 4, '0', STR_PAD_LEFT) . $tahun . str_pad($bulanInt, 2, '0', STR_PAD_LEFT);
-
-            return $no_tagihan;
-        }
 
 
     }

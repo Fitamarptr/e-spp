@@ -43,18 +43,24 @@ $user = $_SESSION['user'];
 <?php if ($_SESSION['user']['role'] == 'admin' || $_SESSION['user']['role'] == 'staff') { ?>
 <hr class="sidebar-divider">
 <!-- Nav Item - Charts -->
-<li class="nav-item">
-    <a class="nav-link" href="spp.php">
-        <i class="fas fa-fw fa-chart-area"></i>
-        <span>Spp</span></a>
-</li>
+    <li class="nav-item">
+        <a class="nav-link" href="siswa.php">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Siswa</span></a>
+    </li>
 <?php } ?>
 <?php  if ($_SESSION['user']['role'] == 'admin') { ?>
 <!-- Nav Item - Tables -->
 <li class="nav-item">
-    <a class="nav-link" href="siswa.php">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Siswa</span></a>
+        <a class="nav-link" href="spp.php">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Spp</span></a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="tagihan.php">
+        <i class="fas fa-fw fa-chart-area"></i>
+        <span>Tagihan</span></a>
 </li>
 
 <!-- Divider -->

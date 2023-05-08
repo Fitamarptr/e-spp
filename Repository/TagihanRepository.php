@@ -1,111 +1,84 @@
 <?php
 
-namespace Repository{
+Namespace Repository {
 
-use Entity\Tagihan;
-use PDO;
+    use Entity\Tagihan;
 
+    interface TagihanRepository
+    {
 
-    interface TagihanRepository {
-        public function addTagihan(Tagihan $tagihan);
-        public function findTagihanById($id);
-        public function updateTagihan(Tagihan $tagihan);
-        public function deleteTagihanById($id);
-        public function showTagihan();
+        public function add(Tagihan $tagihan): void;
+
+        public function findAll(): array;
+
+        public function remove(int $id_tagihan): bool;
     }
 
+
     class TagihanRepositoryImpl implements TagihanRepository
+    {
+
+        public array $tagihan = array();
+
+        public \PDO  $connection;
+
+        public function __construct(\PDO $connection)
         {
-            private $connection;
+            $this->connection = $connection;
+        }
 
-            public function __construct(PDO $connection) {
-                $this->connection = $connection;
-            }
 
-            public function addTagihan(Tagihan $tagihan) {
-                $statement = $this->connection->prepare(
-                    "INSERT INTO tagihan (no_tagihan, id_siswa, id_spp) VALUES (:no_tagihan, :id_siswa, :id_spp)"
-                );
+        public function add(Tagihan $tagihan): void
+        {
 
-                $statement->execute([
-                    ':tagihan' => $tagihan->getTagihan(),
-                    ':id_siswa' => $tagihan->getIdSiswa(),
-                    ':id_spp' => $tagihan->getIdSpp()
-                ]);
-            }
+            $this->tagihan[] = $tagihan ;
 
-            public function findTagihanById($id) {
-                $statement = $this->connection->prepare(
-                    "SELECT * FROM tagihan WHERE id_tagihan = :id_tagihan"
-                );
 
-                $statement->execute([':id_tagihan' => $id]);
+            $sql = "INSERT INTO tagihan(tagihan, id_siswa, id_spp) VALUES (?,?,?)";
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([$tagihan->getTagihan(), $tagihan->getIdSiswa(), $tagihan->getIdSpp()]);
+        }
 
-                $result = $statement->fetch(PDO::FETCH_ASSOC);
-
-                if (!$result) {
-                    return null;
-                }
-
-                $tagihan = new Tagihan($result['tagihan']);
-                $tagihan->setIdTagihan($result['id_tagihan']);
-                $tagihan->setIdSiswa($result['id_siswa']);
-                $tagihan->setIdSpp($result['id_spp']);
-
-                return $tagihan;
-            }
-
-            public function updateTagihan(Tagihan $tagihan) {
-                $statement = $this->connection->prepare(
-                    "UPDATE tagihan SET tagihan = :tagihan, id_siswa = :id_siswa, id_spp = :id_spp WHERE id_tagihan = :id_tagihan"
-                );
-
-                $statement->execute([
-                    ':tagihan' => $tagihan->getTagihan(),
-                    ':id_siswa' => $tagihan->getIdSiswa(),
-                    ':id_spp' => $tagihan->getIdSpp(),
-                    ':id_tagihan' => $tagihan->getIdTagihan()
-                ]);
-            }
-
-            public function deleteTagihanById($id) {
-                $statement = $this->connection->prepare(
-                    "DELETE FROM tagihan WHERE id_tagihan = :id_tagihan"
-                );
-
-                $statement->execute([':id_tagihan' => $id]);
-            }
-
-        public function showTagihan() {
-            $statement = $this->connection->prepare("
-        SELECT tagihan.*, siswa.siswa, spp.spp
-        FROM tagihan
-        INNER JOIN siswa ON tagihan.id_siswa = siswa.id_siswa
-        INNER JOIN spp ON tagihan.id_spp = spp.id_spp
-    ");
-
+        public function findAll(): array
+        {
+            $sql = "SELECT t.id_tagihan, t.tagihan, s.nis, s.siswa, s.kelas,spp.spp, spp.golongan
+            FROM tagihan t
+            JOIN siswa s ON t.id_siswa = s.id_siswa
+            JOIN spp ON t.id_spp = spp.id_spp";
+            $statement = $this->connection->prepare($sql);
             $statement->execute();
 
-            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            $tagihanList = [];
-
-            foreach ($result as $row) {
+            $tagihanList = array();
+            while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
                 $tagihan = new Tagihan($row['tagihan']);
                 $tagihan->setIdTagihan($row['id_tagihan']);
-                $tagihan->setIdSiswa($row['id_siswa']);
-                $tagihan->setIdSpp($row['id_spp']);
-                $tagihan->setNamaSiswa($row['nama_siswa']);
-                $tagihan->setNominalSpp($row['nominal']);
-
+                $tagihan->setNis($row['nis']);
+                $tagihan->setSiswa($row['siswa']);
+                $tagihan->setKelas($row['kelas']);
+                $tagihan->setSpp($row['spp']);
+                $tagihan->setGolongan($row['golongan']);
                 $tagihanList[] = $tagihan;
             }
 
             return $tagihanList;
         }
 
+        public function remove(int $id_tagihan): bool
+        {
+            $sql = "SELECT id_tagihan FROM tagihan WHERE id_tagihan = ?";
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([$id_tagihan]);
 
-
+            if ($statement->fetch()) {
+                // tagihan ada
+                $sql = "DELETE FROM tagihan WHERE id_tagihan = ?";
+                $statement = $this->connection->prepare($sql);
+                $statement->execute([$id_tagihan]);
+                return $statement->rowCount() > 0;
+            } else {
+                return false;
+            }
+            return false;
+        }
     }
-
-    }
+}

@@ -1,16 +1,10 @@
 <?php
 
-
-
 require __DIR__ . '/../layouts/header.php';
 require_once __DIR__ . '/../Entity/Tagihan.php';
 require_once __DIR__ . "/../Config/Database.php";
 require_once __DIR__ . '/../Repository/TagihanRepository.php';
 require_once __DIR__ . '/../Service/TagihanService.php';
-
-
-
-
 
 use Service\TagihanServiceImpl;
 use Repository\TagihanRepositoryImpl;
@@ -19,18 +13,25 @@ use Entity\Tagihan;
 if(isset($_POST['tambah_tagihan'])) {
     $id_siswa = $_POST['id_siswa'];
     $id_spp = $_POST['id_spp'];
+    $tagihan = generateRandomString(); // generate random string for tagihan
 
     $connection = Config\Database::getConnection();
     $tagihanRepository = new TagihanRepositoryImpl($connection);
     $tagihanService = new TagihanServiceImpl($tagihanRepository);
 
-    $tagihan = new Tagihan();
-    $tagihan->setIdSiswa($id_siswa);
-    $tagihan->setIdSpp($id_spp);
-
-    $tagihanService->addTagihan($tagihan);
+    $tagihanService->addTagihan($tagihan, $id_siswa, $id_spp); // add tagihan to database
 
     echo '<div class="alert alert-success" role="alert">Berhasil Menambah!</div>';
+}
+
+function generateRandomString($length = 8) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
 }
 
 ?>

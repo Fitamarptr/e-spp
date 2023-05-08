@@ -2,51 +2,67 @@
 
 namespace Service{
 
+require_once __DIR__ . '/../Entity/Tagihan.php';
 use Entity\Tagihan;
 use Repository\TagihanRepository;
 
     interface TagihanService {
-        public function addTagihan(Tagihan $tagihan);
-        public function findTagihanById($id);
-        public function updateTagihan(Tagihan $tagihan);
-        public function deleteTagihanById($id);
-        public function showTagihan();
+        public function addTagihan(string $tagihan,int $id_siswa, int $id_spp): void;
+        public function showTagihan(): array;
+        public function removeTagihan(int $id_tagihan): bool;
     }
+
     class TagihanServiceImpl implements TagihanService
+    {
+        private TagihanRepository $tagihanRepository;
+
+        public function __construct(TagihanRepository $tagihanRepository)
         {
-                private TagihanRepository $tagihanRepository;
-
-                public function __construct(TagihanRepository $tagihanRepository)
-                {
-                    $this->tagihanRepository = $tagihanRepository;
-                }
-
-
-        public function addTagihan(Tagihan $tagihan)
-        {
-            // Check if the id_siswa and id_spp properties of the Tagihan object exist
-            if ($tagihan->getIdSiswa() && $tagihan->getIdSpp()) {
-                // Call the addTagihan() method of the TagihanRepository object to add the Tagihan object to the database
-                $this->tagihanRepository->addTagihan($tagihan);
-            } else {
-
-            }
+            $this->tagihanRepository = $tagihanRepository;
         }
 
-            public function findTagihanById($id) {
-                return $this->tagihanRepository->findTagihanById($id);
+        public function addTagihan(string $tagihan,int $id_siswa, int $id_spp): void
+        {
+            // Retrieve the golongan,nominal from the database based on the id_spp
+            $sql = "SELECT spp,golongan FROM spp WHERE id_spp = ?";
+            $statement = $this->tagihanRepository->connection->prepare($sql);
+            $statement->execute([$id_spp]);
+            $result = $statement->fetch(\PDO::FETCH_ASSOC);
+
+            if (!$result) {
+                throw new \Exception("SPP with id $id_spp not found");
             }
 
-            public function updateTagihan(Tagihan $tagihan) {
-                $this->tagihanRepository->updateTagihan($tagihan);
-            }
+            // Retrieve the nis,nama,kelas from the database based on the id_siswa
+            $sql2 = "SELECT siswa,nis,kelas FROM siswa WHERE id_siswa = ?";
+            $statement2 = $this->tagihanRepository->connection->prepare($sql2);
+            $statement2->execute([$id_siswa]);
+            $result2 = $statement2->fetch(\PDO::FETCH_ASSOC);
 
-            public function deleteTagihanById($id) {
-                $this->tagihanRepository->deleteTagihanById($id);
+            if (!$result2) {
+                throw new \Exception("Siswa with id $id_siswa not found");
             }
+            // Create a new tagihan object with the retrieved data
+            $newTagihan = new Tagihan($tagihan);
+            $newTagihan->setIdSpp($id_spp);
+            $newTagihan->setSpp($result['spp']);
+            $newTagihan->setGolongan($result['golongan']);
+            $newTagihan->setIdSiswa($id_siswa);
+            $newTagihan->setSiswa($result2['siswa']);
+            $newTagihan->setNis($result2['nis']);
+            $newTagihan->setKelas($result2['kelas']);
 
-            public function showTagihan() {
-                return $this->tagihanRepository->showTagihan();
-            }
+            $this->tagihanRepository->add($newTagihan);
         }
+
+        public function showTagihan(): array
+        {
+            return $this->tagihanRepository->findAll();
+        }
+
+        public function removeTagihan(int $id_tagihan): bool
+        {
+            return $this->tagihanRepository->remove($id_tagihan);
+        }
+    }
     }

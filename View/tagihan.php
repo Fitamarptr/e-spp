@@ -1,29 +1,17 @@
 <?php
 
 require_once __DIR__ . '/../layouts/header.php';
-require_once __DIR__ . '/../Entity/Siswa.php';
 require_once __DIR__ . '/../Entity/Tagihan.php';
-require_once __DIR__ . "/../Config/Database.php";
-require_once __DIR__ . '/../Repository/SiswaRepository.php';
+require_once __DIR__ . '/../Config/Database.php';
 require_once __DIR__ . '/../Repository/TagihanRepository.php';
-require_once __DIR__ . '/../Service/SiswaService.php';
 require_once __DIR__ . '/../Service/TagihanService.php';
 
-use Service\SiswaServiceImpl;
 use Service\TagihanServiceImpl;
-use Repository\SiswaRepositoryImpl;
 use Repository\TagihanRepositoryImpl;
-use Entity\Siswa;
-use Entity\Tagihan;
 
 $connection = Config\Database::getConnection();
-$siswaRepository = new SiswaRepositoryImpl($connection);
 $tagihanRepository = new TagihanRepositoryImpl($connection);
-
-$siswaService = new SiswaServiceImpl($siswaRepository);
 $tagihanService = new TagihanServiceImpl($tagihanRepository);
-
-$siswaList = $siswaService->showSiswa();
 $tagihanList = $tagihanService->showTagihan();
 
 ?>
@@ -76,31 +64,25 @@ $tagihanList = $tagihanService->showTagihan();
                                     <thead>
                                     <tr>
                                         <th scope="col">No</th>
-                                        <th scope="col">NISN</th>
+                                        <th scope="col">No Tagihan</th>
+                                        <th scope="col">NIS</th>
                                         <th scope="col">Nama</th>
                                         <th scope="col">Kelas</th>
-                                        <th scope="col">Bulan</th>
                                         <th scope="col">Nominal</th>
+                                        <th scope="col">Golongan</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach ($tagihanList as $key => $tagihan) { ?>
+                                    <?php foreach ($tagihanList as $number => $tagihan) { ?>
                                         <tr>
-                                            <th scope="row"><?php echo $key + 1 ?></th>
-                                            <td><?php echo $tagihan->getSiswa()->getNisn() ?></td>
-                                            <td><?php echo $tagihan->getSiswa()->getNama() ?></td>
-                                            <td><?php echo $tagihan->getSiswa()->getKelas() ?></td>
-                                            <td><?php echo $tagihan->getBulan() ?></td>
-                                            <td><?php echo $tagihan->getNominal() ?></td>
-                                            <td>
-                                                <a href="editTagihan.php?id=<?php echo $tagihan->getId() ?>" class="btn btn-warning btn-sm">
-                                                    <i class="fas fa-edit"></i> Edit
-                                                </a>
-                                                <a href="../Process/deleteTagihanProcess.php?id=<?php echo $tagihan->getId() ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah anda yakin ingin menghapus tagihan ini?');">
-                                                    <i class="fas fa-trash"></i> Delete
-                                                </a>
-                                            </td>
+                                            <th scope="row"><?php echo $number + 1 ?></th>
+                                            <td><?php echo $tagihan->getTagihan() ?></td>
+                                            <td><?php echo $tagihan->getNis() ?></td>
+                                            <td><?php echo $tagihan->getSiswa() ?></td>
+                                            <td><?php echo $tagihan->getKelas() ?></td>
+                                            <td><?php echo $tagihan->getSpp() ?></td>
+                                            <td><?php echo $tagihan->getGolongan() ?></td>
                                         </tr>
                                     <?php } ?>
                                     </tbody>

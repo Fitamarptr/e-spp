@@ -13,6 +13,10 @@ namespace Repository {
 
         function findAll(): array;
 
+        function update(Spp $spp): bool;
+
+        function findById(int $id): ?Spp;
+
     }
 
     class SppRepositoryImpl implements SppRepository {
@@ -74,7 +78,40 @@ namespace Repository {
 
             return $sppList;
         }
+        function update(Spp $spp): bool
+        {
+            $sql = "UPDATE spp SET spp = ?, bulan = ?, tahun = ?, golongan = ? WHERE id_spp = ?";
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([$spp->getSpp(), $spp->getBulan(), $spp->getTahun(), $spp->getGolongan(), $spp->getId()]);
 
+            // Check if the update was successful
+            if ($statement->rowCount() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function findById(int $id): ?Spp
+        {
+            $sql = "SELECT * FROM spp WHERE id_spp = ?";
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([$id]);
+
+            $row = $statement->fetch(\PDO::FETCH_ASSOC);
+
+            if (!$row) {
+                return null;
+            }
+
+            $spp = new Spp($row['spp']);
+            $spp->setId($row['id_spp']);
+            $spp->setBulan($row['bulan']);
+            $spp->setTahun($row['tahun']);
+            $spp->setGolongan($row['golongan']);
+
+            return $spp;
+        }
 
 
 

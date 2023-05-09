@@ -60,9 +60,9 @@ use Repository\TagihanRepository;
             return $this->tagihanRepository->findAll();
         }
 
-        public function removeTagihan(int $id_tagihan): bool
+        public function removeTagihan(int $number): bool
         {
-            return $this->tagihanRepository->remove($id_tagihan);
+            return $this->tagihanRepository->remove($number);
         }
     }
     }

@@ -63,17 +63,17 @@ Namespace Repository {
             return $tagihanList;
         }
 
-        public function remove(int $id_tagihan): bool
+        public function remove(int $number): bool
         {
             $sql = "SELECT id_tagihan FROM tagihan WHERE id_tagihan = ?";
             $statement = $this->connection->prepare($sql);
-            $statement->execute([$id_tagihan]);
+            $statement->execute([$number]);
 
             if ($statement->fetch()) {
                 // tagihan ada
                 $sql = "DELETE FROM tagihan WHERE id_tagihan = ?";
                 $statement = $this->connection->prepare($sql);
-                $statement->execute([$id_tagihan]);
+                $statement->execute([$number]);
                 return $statement->rowCount() > 0;
             } else {
                 return false;

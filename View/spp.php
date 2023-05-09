@@ -79,6 +79,16 @@ $sppList = $sppService->showSpp();
                                 <a href="addSpp.php" class="btn btn-primary">
                                     <i class="fas fa-plus"></i> Tambah SPP
                                 </a>
+                                <form method="GET" class="float-right">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Cari SPP" name="keyword" value="<?php echo isset($_GET['keyword']) ? $_GET['keyword'] : ''; ?>">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="submit">
+                                                <i class="fas fa-search"></i> Cari
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <div class="card-body">
                                 <table class="table table-striped">
@@ -93,16 +103,30 @@ $sppList = $sppService->showSpp();
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach ($sppList as $number => $spp) { ?>
+                                    <?php foreach ($sppList as $number => $spp) {
+                                        if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+                                            $keyword = strtolower($_GET['keyword']);
+                                            $found = false;
+                                            if (stripos(strtolower($spp->getId()), $keyword) !== false ||
+                                                stripos(strtolower($spp->getSpp()), $keyword) !== false ||
+                                                stripos(strtolower($spp->getBulan()), $keyword) !== false ||
+                                                stripos(strtolower($spp->getTahun()), $keyword) !== false ||
+                                                stripos(strtolower($spp->getGolongan()), $keyword) !== false) {
+                                                $found = true;
+                                            }
+                                            if (!$found) {
+                                                continue;
+                                            }
+                                        } ?>
                                         <tr>
-                                            <td><?php echo $number += 1 ?></td>
+                                            <td><?php echo $number + 1 ?></td>
                                             <td><?php echo $spp->getSpp() ?></td>
                                             <td><?php echo $spp->getBulan() ?></td>
                                             <td><?php echo $spp->getTahun() ?></td>
                                             <td><?php echo $spp->getGolongan() ?></td>
                                             <td>
                                                 <form method="POST" action="removeSpp.php" style="display: inline-block">
-                                                    <button class="btn btn-danger" name ="delete" onclick="return confirm('Anda yakin akan menghapus data siswa ini?"><i class="fas fa-trash"></i> Hapus</button>
+                                                    <button class="btn btn-danger" name ="delete" onclick="return confirm('Anda yakin akan menghapus data siswa ini?')"><i class="fas fa-trash"></i> Hapus</button>
                                                     <input type="hidden" name="id" value="<?php echo $spp->getId(); ?>">
                                                 </form>
                                             </td>

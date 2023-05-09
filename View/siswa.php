@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 
 require_once __DIR__ .  '/../layouts/header.php';
@@ -64,6 +64,16 @@ $siswaList = $siswaService->showSiswa();
                                 <a href="addSiswa.php" class="btn btn-primary">
                                     <i class="fas fa-plus"></i> Tambah Siswa
                                 </a>
+                                <form method="GET" class="float-right">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Cari Siswa" name="keyword" value="<?php echo isset($_GET['keyword']) ? $_GET['keyword'] : ''; ?>">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="submit">
+                                                <i class="fas fa-search"></i> Cari
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <div class="card-body">
                                 <table class="table table-striped">
@@ -78,7 +88,21 @@ $siswaList = $siswaService->showSiswa();
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach ($siswaList as $number => $siswa) { ?>
+                                    <?php foreach ($siswaList as $number => $siswa) {
+                                        if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+                                            $keyword = strtolower($_GET['keyword']);
+                                            $found = false;
+                                            if (stripos(strtolower($siswa->getId()), $keyword) !== false ||
+                                                stripos(strtolower($siswa->getSiswa()), $keyword) !== false ||
+                                                stripos(strtolower($siswa->getNis()), $keyword) !== false ||
+                                                stripos(strtolower($siswa->getKelas()), $keyword) !== false ||
+                                                stripos(strtolower($siswa->getGolongan()), $keyword) !== false) {
+                                                $found = true;
+                                            }
+                                            if (!$found) {
+                                                continue;
+                                            }
+                                        } ?>
                                         <tr>
                                             <td><?php echo $number += 1 ?></td>
                                             <td><?php echo $siswa->getSiswa() ?></td>

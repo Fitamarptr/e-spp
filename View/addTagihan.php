@@ -79,7 +79,7 @@ function generateRandomString($length = 8) {
                                 <h6 class="m-0 font-weight-bold text-primary">Tambah Data Tagihan</h6>
                             </div>
                             <div class=" card-header py-3 d-grid gap-2 d-md-flex justify-content-md-end">
-                                <a href="siswa.php" class="btn btn-primary">
+                                <a href="tagihan.php" class="btn btn-primary">
                                     <i class="fas fa-arrow-left"></i> Kembali
                                 </a>
                             </div>

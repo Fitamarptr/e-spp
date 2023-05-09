@@ -45,7 +45,7 @@ $user = $_SESSION['user'];
 <!-- Nav Item - Charts -->
     <li class="nav-item">
         <a class="nav-link" href="siswa.php">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-school"></i>
             <span>Siswa</span></a>
     </li>
 <?php } ?>
@@ -53,13 +53,13 @@ $user = $_SESSION['user'];
 <!-- Nav Item - Tables -->
 <li class="nav-item">
         <a class="nav-link" href="spp.php">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-money-bill"></i>
             <span>Spp</span></a>
 </li>
 
 <li class="nav-item">
     <a class="nav-link" href="tagihan.php">
-        <i class="fas fa-fw fa-chart-area"></i>
+        <i class="fas fa-fw fa-file-invoice-dollar"></i>
         <span>Tagihan</span></a>
 </li>
 

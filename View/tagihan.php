@@ -51,13 +51,23 @@ $tagihanList = $tagihanService->showTagihan();
 
                 <!-- Content Row -->
                 <div class="row">
-                    <div class="col-lg-10 mb-4">
+                    <div class="col-lg-20 mb-4">
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <!-- <h6 class="m-0 font-weight-bold text-primary">SPP</h6> -->
                                 <a href="addTagihan.php" class="btn btn-primary">
                                     <i class="fas fa-plus"></i> Tambah Tagihan
                                 </a>
+                                <form method="GET" class="float-right">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Cari Tagihan" name="keyword" value="<?php echo isset($_GET['keyword']) ? $_GET['keyword'] : ''; ?>">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="submit">
+                                                <i class="fas fa-search"></i> Cari
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <div class="card-body">
                                 <table class="table table-striped">
@@ -74,15 +84,37 @@ $tagihanList = $tagihanService->showTagihan();
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach ($tagihanList as $number => $tagihan) { ?>
+                                    <?php foreach ($tagihanList as $number => $tagihan) {
+                                        if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+                                            $keyword = strtolower($_GET['keyword']);
+                                            $found = false;
+                                            if (stripos(strtolower($tagihan->getIdTagihan()), $keyword) !== false ||
+                                                stripos(strtolower($tagihan->getTagihan()), $keyword) !== false ||
+                                                stripos(strtolower($tagihan->getNis()), $keyword) !== false ||
+                                                stripos(strtolower($tagihan->getSiswa()), $keyword) !== false ||
+                                                stripos(strtolower($tagihan->getKelas()), $keyword) !== false ||
+                                                stripos(strtolower($tagihan->getSpp()), $keyword) !== false ||
+                                                stripos(strtolower($tagihan->getGolongan()), $keyword) !== false) {
+                                                $found = true;
+                                            }
+                                            if (!$found) {
+                                                continue;
+                                            }
+                                        } ?>
                                         <tr>
-                                            <th scope="row"><?php echo $number + 1 ?></th>
+                                            <td><?php echo $number + 1 ?></td>
                                             <td><?php echo $tagihan->getTagihan() ?></td>
                                             <td><?php echo $tagihan->getNis() ?></td>
                                             <td><?php echo $tagihan->getSiswa() ?></td>
                                             <td><?php echo $tagihan->getKelas() ?></td>
                                             <td><?php echo $tagihan->getSpp() ?></td>
                                             <td><?php echo $tagihan->getGolongan() ?></td>
+                                            <td>
+                                                <form method="POST" action="removeTagihan.php" style="display: inline-block">
+                                                    <button class="btn btn-danger" name ="delete" onclick="return confirm('Anda yakin akan menghapus data siswa ini?"><i class="fas fa-trash"></i> Hapus</button>
+                                                    <input type="hidden" name="id" value="<?php echo $tagihan->getIdTagihan(); ?>">
+                                                </form>
+                                            </td>
                                         </tr>
                                     <?php } ?>
                                     </tbody>

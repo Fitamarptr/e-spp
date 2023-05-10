@@ -68,7 +68,7 @@ use Repository\TagihanRepository;
 
         public function bayarTagihan(string $tagihan): void
         {
-            $sql = "UPDATE tagihan SET status = 'terbayar' WHERE id_tagihan = ?";
+            $sql = "UPDATE tagihan SET status = 'Terbayar' WHERE id_tagihan = ?";
             $statement = $this->tagihanRepository->connection->prepare($sql);
             $statement->execute([$tagihan]);
         }

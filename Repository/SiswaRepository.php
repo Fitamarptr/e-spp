@@ -12,6 +12,10 @@ Namespace Repository {
         public function findAll(): array;
 
         public function remove(int $number): bool;
+
+        public function update(Siswa $siswa): bool;
+
+        public function findById(int $id): ?Siswa;
     }
 
 
@@ -78,6 +82,44 @@ Namespace Repository {
             return false;
         }
 
+        public function update(Siswa $siswa): bool
+        {
+            $sql = "UPDATE siswa s
+            JOIN spp sp ON s.id_spp = sp.id_spp
+            SET s.siswa = ?, s.nis = ?, s.kelas = ?, s.golongan = sp.golongan
+            WHERE s.id_siswa = ?";
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([$siswa->getSiswa(), $siswa->getNis(), $siswa->getKelas(), $siswa->getGolongan(), $siswa->getId()]);
+
+            return $statement->rowCount() > 0;
+        }
+
+
+        public function findById(int $id): ?Siswa
+        {
+            $sql = "SELECT s.id_siswa, s.siswa, s.nis, s.kelas, sp.tahun, sp.golongan, sp.id_spp
+            FROM siswa s
+            JOIN spp sp ON s.id_spp = sp.id_spp
+            WHERE s.id_siswa = ?";
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([$id]);
+
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+            if (!$result) {
+                return null;
+            }
+
+            $siswa = new Siswa($result['siswa']);
+            $siswa->setId($result['id_siswa']);
+            $siswa->setNis($result['nis']);
+            $siswa->setKelas($result['kelas']);
+            $siswa->setTahun($result['tahun']);
+            $siswa->setGolongan($result['golongan']);
+            $siswa->setIdSpp($result['id_spp']);
+
+            return $siswa;
+        }
 
 
     }

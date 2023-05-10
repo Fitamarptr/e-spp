@@ -57,7 +57,7 @@ $siswaList = $siswaService->showSiswa();
 
                 <!-- Content Row -->
                 <div class="row">
-                    <div class="col-lg-10 mb-4">
+                    <div class="col-lg-12 mb-4">
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <!-- <h6 class="m-0 font-weight-bold text-primary">SPP</h6> -->
@@ -115,6 +115,10 @@ $siswaList = $siswaService->showSiswa();
                                             <td>
                                                 <form method="POST" action="removeSiswa.php">
                                                     <button class="btn btn-danger" name ="delete"><i class="fas fa-trash"></i> Hapus</button>
+                                                    <input type="hidden" name="id" value="<?php echo $siswa->getId(); ?>">
+                                                </form>
+                                                <form method="GET" action="editSiswa.php" style="display: inline-block">
+                                                    <button class="btn btn-primary"><i class="fas fa-edit"></i> Edit</button>
                                                     <input type="hidden" name="id" value="<?php echo $siswa->getId(); ?>">
                                                 </form>
                                             </td>

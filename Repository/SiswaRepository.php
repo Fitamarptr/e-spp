@@ -40,7 +40,7 @@ Namespace Repository {
 
         public function findAll(): array
         {
-            $sql = "SELECT s.id_siswa, s.siswa, s.nis, s.kelas, sp.golongan
+            $sql = "SELECT s.id_siswa, s.siswa, s.nis, s.kelas, sp.tahun, sp.golongan
             FROM siswa s
             JOIN spp sp ON s.id_spp = sp.id_spp";
             $statement = $this->connection->prepare($sql);
@@ -52,6 +52,7 @@ Namespace Repository {
                 $siswa->setId($row['id_siswa']);
                 $siswa->setNis($row['nis']);
                 $siswa->setKelas($row['kelas']);
+                $siswa->setTahun($row['tahun']);
                 $siswa->setGolongan($row['golongan']);
                 $siswaList[] = $siswa;
             }

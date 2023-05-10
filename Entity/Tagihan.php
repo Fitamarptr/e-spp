@@ -4,6 +4,7 @@ Namespace Entity {
 
     class Tagihan {
         private int $id_tagihan;
+        private string $tahun;
         private string $tagihan;
         private int $id_siswa;
         private int $id_spp;
@@ -12,6 +13,7 @@ Namespace Entity {
         private string $kelas;
         private int $spp;
         private int $golongan;
+        private string $status = 'Tidak Terbayar';
 
 
         public function __construct($tagihan)
@@ -29,8 +31,6 @@ Namespace Entity {
             $this->id_tagihan = $id_tagihan;
         }
 
-
-
         public function getTagihan()
         {
             return $this->tagihan;
@@ -39,6 +39,16 @@ Namespace Entity {
         public function setTagihan($tagihan): void
         {
             $this->tagihan = $tagihan;
+        }
+
+        public function getTahun(): string
+        {
+            return $this->tahun;
+        }
+
+        public function setTahun(string $tahun): void
+        {
+            $this->tahun = $tahun;
         }
 
         public function getIdSiswa() {
@@ -106,6 +116,17 @@ Namespace Entity {
         {
             $this->golongan = $golongan;
         }
+
+        public function getStatus(): string
+        {
+            return $this->status;
+        }
+
+        public function setStatus(string $status): void
+        {
+            $this->status = $status;
+        }
+
 
 
     }

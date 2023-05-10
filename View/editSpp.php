@@ -1,6 +1,4 @@
 <?php
-
-
 require __DIR__ . '/../layouts/header.php';
 require_once __DIR__ . '/../Entity/Spp.php';
 require_once __DIR__ . "/../Config/Database.php";
@@ -18,19 +16,23 @@ $sppRepository = new SppRepositoryImpl($connection);
 
 $sppService = new SppServiceImpl($sppRepository);
 
-    if (isset($_POST['update'])) {
+// ambil ID SPP dari parameter GET
+$id = $_GET['id'];
 
-        $spp = new Spp($_POST['spp']);
-        $spp->setBulan($_POST['bulan']);
-        $spp->setStatus($_POST['status']);
+// ambil data SPP dari repository
+$spp = $sppService->getSppById($id);
 
+// jika form di-submit
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // ambil data dari form
+    $sppValue = $_POST['spp'];
+    $tahunValue = $_POST['tahun'];
+    $golonganValue = $_POST['golongan'];
 
-        $result = $sppService->updateSpp($spp);
-        if ($result) {
-            echo "Data with ID $id has been updated successfully.";
-        } else {
-            echo "Failed to update data with ID $id.";
-        }
+    // update data SPP
+    $sppService->updateSpp($id, $sppValue, $tahunValue, $golonganValue);
+
+    echo '<div class="alert alert-success" role="alert">Berhasil Mengedit!</div>';
 }
 
 
@@ -85,22 +87,20 @@ $sppService = new SppServiceImpl($sppRepository);
                                     </a>
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" action="">
-
+                                    <form method="POST">
                                         <div class="form-group">
-                                            <label for="bulan">Bulan</label>
-                                            <input type="text" name="bulan" value="<?php echo $spp->getBulan(); ?>">
+                                            <label>Nominal:</label>
+                                            <input type="text" class="form-control" name="spp" value="<?php echo $spp->getSpp(); ?>">
                                         </div>
                                         <div class="form-group">
-                                            <label for="status" class="form-label">Status</label>
-                                            <input type="text" name="status" value="<?php echo $spp->getStatus(); ?>">
+                                            <label>Tahun Ajaran:</label>
+                                            <input type="text" class="form-control" name="tahun" value="<?php echo $spp->getTahun(); ?>">
                                         </div>
                                         <div class="form-group">
-                                            <label for="nominal">Nominal</label>
-                                            <input type="number" name="spp" value="<?php echo $spp->getSpp(); ?>">
+                                            <label>Golongan:</label>
+                                            <input type="text" class="form-control" name="golongan" value="<?php echo $spp->getGolongan(); ?>">
                                         </div>
-                                        <input type="hidden" name="id" value="<?php echo $spp->getId(); ?>">
-                                        <button type="submit" class="btn btn-primary" name="update">Update SPP</button>
+                                        <button type="submit" class="btn btn-primary">Update</button>
                                     </form>
                                 </div>
                             </div>

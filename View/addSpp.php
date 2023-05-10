@@ -13,22 +13,32 @@ use Service\SppServiceImpl;
 use Repository\SppRepositoryImpl;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $bulan = $_POST['bulan'];
-    $nominal = $_POST['nominal'];
     $tahun = $_POST['tahun'];
     $golongan = $_POST['golongan'];
 
-
-
     $connection = Config\Database::getConnection();
     $sppRepository = new SppRepositoryImpl($connection);
-
     $sppService = new SppServiceImpl($sppRepository);
-    $sppService->addSpp($nominal, $bulan, $tahun, $golongan);
 
+    switch ($golongan) {
+        case "1":
+            $nominal = 150000;
+            break;
+        case "2":
+            $nominal = 250000;
+            break;
+        case "3":
+            $nominal = 350000;
+            break;
+        case "4":
+            $nominal = 450000;
+            break;
+        default:
+            $nominal = $_POST['nominal'];
+    }
+
+    $sppService->addSpp($nominal, $tahun, $golongan);
     echo '<div class="alert alert-success" role="alert">Berhasil Menambah!</div>';
-//    header("Location: spp.php");
-//    exit();
 }
 
 ?>
@@ -83,16 +93,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="card-body">
                                 <form method="POST" action="">
                                     <div class="form-group">
-                                        <label for="bulan">Bulan</label>
-                                        <input type="text" class="form-control" name="bulan" id="bulan">
-                                    </div>
-                                    <div class="form-group">
                                         <label for="tahun" class="form-label">Tahun</label>
-                                        <input type="number" name="tahun" id="tahun" max="9999" class="form-control" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="nominal">Nominal</label>
-                                        <input type="number" class="form-control" name="nominal">
+                                        <select name="tahun" id="tahun" class="form-control">
+                                            <option value="2019/2020">2019/2020</option>
+                                            <option value="2020/2021">2020/2021</option>
+                                            <option value="2021/2022">2021/2022</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="golongan">Golongan</label>
@@ -101,9 +107,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <option value="2">Golongan 2</option>
                                             <option value="3">Golongan 3</option>
                                             <option value="4">Golongan 4</option>
-                                            <option value="5">Golongan 5</option>
-                                            <option value="6">Golongan 6</option>
                                         </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nominal">Nominal</label>
+                                        <input type="number" class="form-control" name="nominal">
                                     </div>
                                     <button type="submit" class="btn btn-primary" name="tambah_spp">Tambah SPP</button>
                                 </form>

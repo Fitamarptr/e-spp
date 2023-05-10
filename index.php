@@ -19,7 +19,7 @@ $users = [
         'username' => 'fazry',
         'password' => 'password',
         'role' => 'user',
-        'redirect' => 'View/dashboard.php'
+        'redirect' => 'View/pembayaranSiswa.php'
     ]
 ];
 

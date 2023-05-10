@@ -8,6 +8,7 @@ Namespace Entity {
         private string $siswa;
         private int $nis;
         private string $kelas;
+        private string $tahun;
         private int $golongan;
         private int $id_spp;
 
@@ -53,6 +54,16 @@ Namespace Entity {
 
         public function setKelas($kelas) {
             $this->kelas = $kelas;
+        }
+
+        public function getTahun(): string
+        {
+            return $this->tahun;
+        }
+
+        public function setTahun(string $tahun): void
+        {
+            $this->tahun = $tahun;
         }
 
         public function getGolongan(): int

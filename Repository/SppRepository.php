@@ -23,7 +23,7 @@ namespace Repository {
 
         public array $spp = array();
 
-        private \PDO  $connection;
+        public \PDO  $connection;
 
         public function __construct(\PDO $connection)
         {
@@ -35,9 +35,9 @@ namespace Repository {
         {
             $this->spp[] = $spp;
 
-            $sql = "INSERT INTO spp(spp,bulan,tahun,golongan) VALUES (?,?,?,?)";
+            $sql = "INSERT INTO spp(spp,tahun,golongan) VALUES (?,?,?)";
             $statement = $this->connection->prepare($sql);
-            $statement->execute([$spp->getSpp(), $spp->getBulan(), $spp->getTahun(), $spp->getGolongan()]);
+            $statement->execute([$spp->getSpp(),$spp->getTahun(), $spp->getGolongan()]);
         }
 
         function remove(int $number): bool
@@ -70,7 +70,6 @@ namespace Repository {
             while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
                 $spp = new Spp($row['spp']);
                 $spp->setId($row['id_spp']);
-                $spp->setBulan($row['bulan']);
                 $spp->setTahun($row['tahun']);
                 $spp->setGolongan($row['golongan']);
                 $sppList[] = $spp;
@@ -80,9 +79,9 @@ namespace Repository {
         }
         function update(Spp $spp): bool
         {
-            $sql = "UPDATE spp SET spp = ?, bulan = ?, tahun = ?, golongan = ? WHERE id_spp = ?";
+            $sql = "UPDATE spp SET spp = ?, tahun = ?, golongan = ? WHERE id_spp = ?";
             $statement = $this->connection->prepare($sql);
-            $statement->execute([$spp->getSpp(), $spp->getBulan(), $spp->getTahun(), $spp->getGolongan(), $spp->getId()]);
+            $statement->execute([$spp->getSpp(),$spp->getTahun(), $spp->getGolongan(), $spp->getId()]);
 
             // Check if the update was successful
             if ($statement->rowCount() == 1) {
@@ -106,7 +105,6 @@ namespace Repository {
 
             $spp = new Spp($row['spp']);
             $spp->setId($row['id_spp']);
-            $spp->setBulan($row['bulan']);
             $spp->setTahun($row['tahun']);
             $spp->setGolongan($row['golongan']);
 

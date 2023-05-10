@@ -7,8 +7,7 @@ namespace Entity {
     {
         private int $Id;
         private int $spp;
-        private string $bulan;
-        private int $tahun;
+        private string $tahun;
         private int $golongan;
 
 
@@ -38,23 +37,12 @@ namespace Entity {
             $this->spp = $spp;
         }
 
-
-        public function getBulan(): string
-        {
-            return $this->bulan;
-        }
-
-        public function setBulan(string $bulan): void
-        {
-            $this->bulan = $bulan;
-        }
-
-        public function getTahun(): int
+        public function getTahun(): string
         {
             return $this->tahun;
         }
 
-        public function setTahun(int $tahun): void
+        public function setTahun(string $tahun): void
         {
             $this->tahun = $tahun;
         }

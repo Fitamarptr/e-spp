@@ -83,6 +83,7 @@ $siswaList = $siswaService->showSiswa();
                                         <th>Siswa</th>
                                         <th>NIS</th>
                                         <th>Kelas</th>
+                                        <th>Tahun Ajaran</th>
                                         <th>Golongan</th>
                                         <th>Action</th>
                                     </tr>
@@ -96,6 +97,7 @@ $siswaList = $siswaService->showSiswa();
                                                 stripos(strtolower($siswa->getSiswa()), $keyword) !== false ||
                                                 stripos(strtolower($siswa->getNis()), $keyword) !== false ||
                                                 stripos(strtolower($siswa->getKelas()), $keyword) !== false ||
+                                                stripos(strtolower($siswa->getTahun()), $keyword) !== false ||
                                                 stripos(strtolower($siswa->getGolongan()), $keyword) !== false) {
                                                 $found = true;
                                             }
@@ -108,6 +110,7 @@ $siswaList = $siswaService->showSiswa();
                                             <td><?php echo $siswa->getSiswa() ?></td>
                                             <td><?php echo $siswa->getNis() ?></td>
                                             <td><?php echo $siswa->getKelas() ?></td>
+                                            <td><?php echo $siswa->getTahun() ?></td>
                                             <td><?php echo $siswa->getGolongan() ?></td>
                                             <td>
                                                 <form method="POST" action="removeSiswa.php">

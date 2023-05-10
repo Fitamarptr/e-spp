@@ -24,7 +24,7 @@ use Repository\TagihanRepository;
         public function addTagihan(string $tagihan,int $id_siswa, int $id_spp): void
         {
             // Retrieve the golongan,nominal from the database based on the id_spp
-            $sql = "SELECT spp,golongan FROM spp WHERE id_spp = ?";
+            $sql = "SELECT spp,golongan,tahun FROM spp WHERE id_spp = ?";
             $statement = $this->tagihanRepository->connection->prepare($sql);
             $statement->execute([$id_spp]);
             $result = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -47,6 +47,7 @@ use Repository\TagihanRepository;
             $newTagihan->setIdSpp($id_spp);
             $newTagihan->setSpp($result['spp']);
             $newTagihan->setGolongan($result['golongan']);
+            $newTagihan->setTahun($result['tahun']);
             $newTagihan->setIdSiswa($id_siswa);
             $newTagihan->setSiswa($result2['siswa']);
             $newTagihan->setNis($result2['nis']);
@@ -64,5 +65,18 @@ use Repository\TagihanRepository;
         {
             return $this->tagihanRepository->remove($number);
         }
+
+        public function bayarTagihan(string $tagihan): void
+        {
+            $sql = "UPDATE tagihan SET status = 'terbayar' WHERE id_tagihan = ?";
+            $statement = $this->tagihanRepository->connection->prepare($sql);
+            $statement->execute([$tagihan]);
+        }
+
+        public function showTagihanByNoTagihan(string $noTagihan): ?Tagihan
+        {
+            return $this->tagihanRepository->findTagihanByNoTagihan($noTagihan);
+        }
+
     }
-    }
+}

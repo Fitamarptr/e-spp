@@ -96,8 +96,7 @@ $sppList = $sppService->showSpp();
                                     <tr>
                                         <th>No</th>
                                         <th>Nominal</th>
-                                        <th>Bulan</th>
-                                        <th>Tahun</th>
+                                        <th>Tahun Ajaran</th>
                                         <th>Golongan</th>
                                         <th>Action</th>
                                     </tr>
@@ -109,7 +108,6 @@ $sppList = $sppService->showSpp();
                                             $found = false;
                                             if (stripos(strtolower($spp->getId()), $keyword) !== false ||
                                                 stripos(strtolower($spp->getSpp()), $keyword) !== false ||
-                                                stripos(strtolower($spp->getBulan()), $keyword) !== false ||
                                                 stripos(strtolower($spp->getTahun()), $keyword) !== false ||
                                                 stripos(strtolower($spp->getGolongan()), $keyword) !== false) {
                                                 $found = true;
@@ -121,12 +119,15 @@ $sppList = $sppService->showSpp();
                                         <tr>
                                             <td><?php echo $number + 1 ?></td>
                                             <td><?php echo $spp->getSpp() ?></td>
-                                            <td><?php echo $spp->getBulan() ?></td>
                                             <td><?php echo $spp->getTahun() ?></td>
                                             <td><?php echo $spp->getGolongan() ?></td>
                                             <td>
                                                 <form method="POST" action="removeSpp.php" style="display: inline-block">
                                                     <button class="btn btn-danger" name ="delete" onclick="return confirm('Anda yakin akan menghapus data siswa ini?')"><i class="fas fa-trash"></i> Hapus</button>
+                                                    <input type="hidden" name="id" value="<?php echo $spp->getId(); ?>">
+                                                </form>
+                                                <form method="GET" action="editSpp.php" style="display: inline-block">
+                                                    <button class="btn btn-primary"><i class="fas fa-edit"></i> Edit</button>
                                                     <input type="hidden" name="id" value="<?php echo $spp->getId(); ?>">
                                                 </form>
                                             </td>

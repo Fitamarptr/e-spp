@@ -8,8 +8,14 @@ namespace Service {
     interface SppService
     {
         function showSpp(): array;
+        
         function addSpp(int $spp,string $tahun, int $golongan): void;
+        
         function removeSpp(int $number): bool;
+        
+        public function updateSpp(int $id, string $spp, string $tahun, string $golongan): bool;
+        
+         public function getSppById(int $id): ?Spp
 
     }
 

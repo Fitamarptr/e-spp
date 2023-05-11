@@ -14,23 +14,25 @@ use Entity\Siswa;
 $connection = Config\Database::getConnection();
 $siswaRepository = new SiswaRepositoryImpl($connection);
 
-$siswaService = new $siswaRepository($siswaRepository);
+$siswaService = new SiswaServiceImpl($siswaRepository);
 
 // ambil ID SPP dari parameter GET
 $id = $_GET['id'];
 
 // ambil data SPP dari repository
-$siswa = $siswaService->getSppById($id);
+$siswa = $siswaService->getSiswaById($id);
 
 // jika form di-submit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // ambil data dari form
-    $sppValue = $_POST['spp'];
-    $tahunValue = $_POST['tahun'];
-    $golonganValue = $_POST['golongan'];
+    // ambil data dari form input
+    $siswa = $_POST['siswa'];
+    $siswaNis = $_POST['nis'];
+    $siswaKelas = $_POST['kelas'];
+    $siswaTahun = $_POST['tahun'];
+    $siswaGolongan = $_POST['golongan'];
 
-    // update data SPP
-    $siswaService->update($id, $sppValue, $tahunValue, $golonganValue);
+    // simpan perubahan data siswa
+    $siswaService->updateSiswa($id ,$siswa, $siswaNis, $siswaKelas, $siswaTahun, $siswaGolongan);
 
     echo '<div class="alert alert-success" role="alert">Berhasil Mengedit!</div>';
 }
@@ -79,10 +81,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="col-lg-6 mb-4">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Update Data Spp</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Update Data Siswa</h6>
                                 </div>
                                 <div class=" card-header py-3 d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <a href="spp.php" class="btn btn-primary">
+                                    <a href="siswa.php" class="btn btn-primary">
                                         <i class="fas fa-arrow-left"></i> Kembali
                                     </a>
                                 </div>
@@ -90,7 +92,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <form method="POST">
                                         <div class="form-group">
                                             <label>Siswa</label>
-                                            <input type="text" class="form-control" name="spp" value="<?php echo $siswa->getSpp(); ?>">
+                                            <input type="text" class="form-control" name="siswa" value="<?php echo $siswa->getSiswa(); ?>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>NIS:</label>
+                                            <input type="text" class="form-control" name="nis" value="<?php echo $siswa->getNis(); ?>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Kelas:</label>
+                                            <input type="text" class="form-control" name="kelas" value="<?php echo $siswa->getKelas(); ?>">
                                         </div>
                                         <div class="form-group">
                                             <label>Tahun Ajaran:</label>

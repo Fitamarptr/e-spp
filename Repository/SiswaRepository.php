@@ -32,15 +32,36 @@ Namespace Repository {
         }
 
 
+//        public function add(Siswa $siswa): void
+//        {
+//            $this->siswa[] = $siswa ;
+//
+//
+//            $sql = "INSERT INTO siswa(siswa,nis,kelas,id_spp) VALUES (?,?,?,?)";
+//            $statement = $this->connection->prepare($sql);
+//            $statement->execute([$siswa->getSiswa(), $siswa->getNis(), $siswa->getKelas(), $siswa->getIdSpp()]);
+//        }
+
         public function add(Siswa $siswa): void
         {
-            $this->siswa[] = $siswa ;
-
-
-            $sql = "INSERT INTO siswa(siswa,nis,kelas,id_spp) VALUES (?,?,?,?)";
+            // Check if id_spp and golongan are valid
+            $sql = "SELECT golongan FROM spp WHERE id_spp = ?";
             $statement = $this->connection->prepare($sql);
-            $statement->execute([$siswa->getSiswa(), $siswa->getNis(), $siswa->getKelas(), $siswa->getIdSpp()]);
+            $statement->execute([$siswa->getIdSpp()]);
+            $result = $statement->fetch(\PDO::FETCH_ASSOC);
+            if (!$result) {
+                throw new \Exception("SPP with id_spp {$siswa->getIdSpp()} not found");
+            }
+
+            $siswa->setGolongan($result['golongan']);
+            $this->siswa[] = $siswa;
+
+            // Insert into siswa table
+            $sql = "INSERT INTO siswa(siswa, nis, kelas, id_spp, golongan) VALUES (?, ?, ?, ?, ?)";
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([$siswa->getSiswa(), $siswa->getNis(), $siswa->getKelas(), $siswa->getIdSpp(), $siswa->getGolongan()]);
         }
+
 
         public function findAll(): array
         {
@@ -86,10 +107,10 @@ Namespace Repository {
         {
             $sql = "UPDATE siswa s
             JOIN spp sp ON s.id_spp = sp.id_spp
-            SET s.siswa = ?, s.nis = ?, s.kelas = ?, s.golongan = sp.golongan
+            SET s.siswa = ?, s.nis = ?, s.kelas = ?, s.golongan = ?
             WHERE s.id_siswa = ?";
             $statement = $this->connection->prepare($sql);
-            $statement->execute([$siswa->getSiswa(), $siswa->getNis(), $siswa->getKelas(), $siswa->getGolongan(), $siswa->getId()]);
+            $statement->execute([$siswa->getSiswa(), $siswa->getNis(), $siswa->getKelas(),$siswa->getGolongan(), $siswa->getId()]);
 
             return $statement->rowCount() > 0;
         }
@@ -104,7 +125,7 @@ Namespace Repository {
             $statement = $this->connection->prepare($sql);
             $statement->execute([$id]);
 
-            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
             if (!$result) {
                 return null;
@@ -120,6 +141,28 @@ Namespace Repository {
 
             return $siswa;
         }
+
+        public function findByIdSpp(int $idSpp): array
+        {
+            $sql = "SELECT * FROM siswa WHERE id_spp = ?";
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([$idSpp]);
+            $results = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+            $siswaArray = [];
+            foreach ($results as $result) {
+                $siswa = new Siswa($result['siswa']);
+                $siswa->setIdSiswa($result['id_siswa']);
+                $siswa->setNis($result['nis']);
+                $siswa->setKelas($result['kelas']);
+                $siswa->setIdSpp($result['id_spp']);
+                $siswa->setGolongan($result['golongan']);
+                $siswaArray[] = $siswa;
+            }
+
+            return $siswaArray;
+        }
+
 
 
     }

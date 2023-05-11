@@ -1,4 +1,3 @@
-<<<<<<< main
 <?php 
 // mengaktifkan session pada php
 session_start();
@@ -60,7 +59,5 @@ if($cek > 0){
 
 
 ?>
-=======
 
->>>>>>> main
 

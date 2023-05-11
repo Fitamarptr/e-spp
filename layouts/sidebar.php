@@ -1,7 +1,5 @@
 <?php
 
-
-$user = $_SESSION['user'];
 ?>
 
 <!-- Sidebar -->
@@ -40,22 +38,26 @@ $user = $_SESSION['user'];
 </li>
 
 <!-- Divider -->
-<?php if ($_SESSION['user']['role'] == 'admin' || $_SESSION['user']['role'] == 'staff') { ?>
+<?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'staff') { ?>
 <hr class="sidebar-divider">
-<!-- Nav Item - Charts -->
-<li class="nav-item">
-    <a class="nav-link" href="spp.php">
-        <i class="fas fa-fw fa-chart-area"></i>
-        <span>Spp</span></a>
-</li>
+    <li class="nav-item">
+        <a class="nav-link" href="spp.php">
+            <i class="fas fa-fw fa-money-bill"></i>
+            <span>Spp</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="siswa.php">
+            <i class="fas fa-fw fa-school"></i>
+            <span>Siswa</span></a>
+    </li>
+
 <?php } ?>
-<?php  if ($_SESSION['user']['role'] == 'admin') { ?>
-<!-- Nav Item - Tables -->
-<li class="nav-item">
-    <a class="nav-link" href="siswa.php">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Siswa</span></a>
-</li>
+<?php  if ($_SESSION['role'] == 'admin') { ?>
+    <li class="nav-item">
+        <a class="nav-link" href="tagihan.php">
+            <i class="fas fa-fw fa-file-invoice-dollar"></i>
+            <span>Tagihan</span></a>
+    </li>
 
 <!-- Divider -->
 <hr class="sidebar-divider d-none d-md-block">

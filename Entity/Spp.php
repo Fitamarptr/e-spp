@@ -5,14 +5,26 @@ namespace Entity {
 
     class Spp
     {
-        private int $id;
+        private int $Id;
         private int $spp;
-        private string $bulan;
-        private string $status;
+        private string $tahun;
+        private int $golongan;
+
 
         public function __construct(int $spp)
         {
             $this->spp = $spp;
+        }
+
+        public function getId(): int
+        {
+            return $this->Id;
+        }
+
+
+        public function setId(int $Id): void
+        {
+            $this->Id = $Id;
         }
 
         public function getSpp(): int
@@ -25,36 +37,28 @@ namespace Entity {
             $this->spp = $spp;
         }
 
-        public function getID(): int
+        public function getTahun(): string
         {
-            return $this->id;
+            return $this->tahun;
         }
 
-        public function setID(int $id): void
+        public function setTahun(string $tahun): void
         {
-            $this->id = $id;
+            $this->tahun = $tahun;
+        }
+
+        public function getGolongan(): int
+        {
+            return $this->golongan;
+        }
+
+        public function setGolongan(int $golongan): void
+        {
+            $this->golongan = $golongan;
         }
 
 
-        public function getBulan(): string
-        {
-            return $this->bulan;
-        }
 
-        public function setBulan(string $bulan): void
-        {
-            $this->bulan = $bulan;
-        }
-
-        public function getStatus(): string
-        {
-            return $this->status;
-        }
-
-        public function setStatus(string $status): void
-        {
-            $this->status = $status;
-        }
 
 
 

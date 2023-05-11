@@ -13,9 +13,9 @@ namespace Repository {
 
         function findAll(): array;
 
-//        function update(int $id, Spp $newSpp): bool;
-//
-//        public function findById(int $id): ?Spp;
+        function update(Spp $spp): bool;
+
+        function findById(int $id): ?Spp;
 
     }
 
@@ -23,7 +23,7 @@ namespace Repository {
 
         public array $spp = array();
 
-        private \PDO  $connection;
+        public \PDO  $connection;
 
         public function __construct(\PDO $connection)
         {
@@ -33,14 +33,11 @@ namespace Repository {
 
         function save(Spp $spp): void
         {
-           // $number = sizeof($this->todolist) + 1;
-           // $this->todolist[$number] = $todolist;
-
             $this->spp[] = $spp;
 
-            $sql = "INSERT INTO spp(spp,bulan,status) VALUES (?,?,?)";
+            $sql = "INSERT INTO spp(spp,tahun,golongan) VALUES (?,?,?)";
             $statement = $this->connection->prepare($sql);
-            $statement->execute([$spp->getSpp(), $spp->getBulan(), $spp->getStatus()]);
+            $statement->execute([$spp->getSpp(),$spp->getTahun(), $spp->getGolongan()]);
         }
 
         function remove(int $number): bool
@@ -72,26 +69,48 @@ namespace Repository {
             $sppList = array();
             while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
                 $spp = new Spp($row['spp']);
-                $spp->setID($row['id_spp']);
-                $spp->setBulan($row['bulan']);
-                $spp->setStatus($row['status']);
+                $spp->setId($row['id_spp']);
+                $spp->setTahun($row['tahun']);
+                $spp->setGolongan($row['golongan']);
                 $sppList[] = $spp;
             }
 
             return $sppList;
         }
-
-
-        public function updateSpp(Spp $spp): bool
+        function update(Spp $spp): bool
         {
-            $sql = "UPDATE spp SET spp = :spp, bulan = :bulan, status = :status WHERE id = :id";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(':spp', $spp->getSpp(), PDO::PARAM_INT);
-            $stmt->bindValue(':bulan', $spp->getBulan(), PDO::PARAM_STR);
-            $stmt->bindValue(':status', $spp->getStatus(), PDO::PARAM_STR);
-            $stmt->bindValue(':id', $spp->getID(), PDO::PARAM_INT);
-            return $stmt->execute();
+            $sql = "UPDATE spp SET spp = ?, tahun = ?, golongan = ? WHERE id_spp = ?";
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([$spp->getSpp(),$spp->getTahun(), $spp->getGolongan(), $spp->getId()]);
+
+            // Check if the update was successful
+            if ($statement->rowCount() == 1) {
+                return true;
+            } else {
+                return false;
+            }
         }
+
+        function findById(int $id): ?Spp
+        {
+            $sql = "SELECT * FROM spp WHERE id_spp = ?";
+            $statement = $this->connection->prepare($sql);
+            $statement->execute([$id]);
+
+            $row = $statement->fetch(\PDO::FETCH_ASSOC);
+
+            if (!$row) {
+                return null;
+            }
+
+            $spp = new Spp($row['spp']);
+            $spp->setId($row['id_spp']);
+            $spp->setTahun($row['tahun']);
+            $spp->setGolongan($row['golongan']);
+
+            return $spp;
+        }
+
 
 
     }

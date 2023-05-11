@@ -5,40 +5,33 @@
 require __DIR__ . '/../layouts/header.php';
 require_once __DIR__ . '/../Entity/Spp.php';
 require_once __DIR__ . "/../Config/Database.php";
-require_once __DIR__ . '/../Repository/SppRepository.php';
-require_once __DIR__ . '/../Service/SppService.php';
+require_once __DIR__ . '/../Repository/SiswaRepository.php';
+require_once __DIR__ . '/../Service/SiswaService.php';
 
 
-use Service\SppServiceImpl;
-use Repository\SppRepositoryImpl;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $tahun = $_POST['tahun'];
-    $golongan = $_POST['golongan'];
+
+
+use Service\SiswaServiceImpl;
+use Repository\SiswaRepositoryImpl;
+
+if(isset($_POST['tambah_siswa'])) {
+    $siswa = $_POST['siswa'];
+    $nis = $_POST['nis'];
+    $kelas = $_POST['kelas'];
+    $id_spp = $_POST['id_spp'];
+
+
 
     $connection = Config\Database::getConnection();
-    $sppRepository = new SppRepositoryImpl($connection);
-    $sppService = new SppServiceImpl($sppRepository);
+    $siswaRepository = new SiswaRepositoryImpl($connection);
 
-    switch ($golongan) {
-        case "1":
-            $nominal = 150000;
-            break;
-        case "2":
-            $nominal = 250000;
-            break;
-        case "3":
-            $nominal = 350000;
-            break;
-        case "4":
-            $nominal = 450000;
-            break;
-        default:
-            $nominal = $_POST['nominal'];
-    }
+    $siswaService = new SiswaServiceImpl($siswaRepository);
+    $siswaService->addSiswa($siswa, $nis, $kelas, $id_spp);
 
-    $sppService->addSpp($nominal, $tahun, $golongan);
     echo '<div class="alert alert-success" role="alert">Berhasil Menambah!</div>';
+//    header("Location: spp.php");
+//    exit();
 }
 
 ?>
@@ -75,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">SPP</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Siswa</h1>
                 </div>
 
                 <!-- Content Row -->
@@ -83,37 +76,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="col-lg-6 mb-4">
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Tambah Data Spp</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Tambah Data Siswa</h6>
                             </div>
                             <div class=" card-header py-3 d-grid gap-2 d-md-flex justify-content-md-end">
-                                <a href="spp.php" class="btn btn-primary">
+                                <a href="siswa.php" class="btn btn-primary">
                                     <i class="fas fa-arrow-left"></i> Kembali
                                 </a>
                             </div>
                             <div class="card-body">
                                 <form method="POST" action="">
                                     <div class="form-group">
-                                        <label for="tahun" class="form-label">Tahun</label>
-                                        <select name="tahun" id="tahun" class="form-control">
-                                            <option value="2019/2020">2019/2020</option>
-                                            <option value="2020/2021">2020/2021</option>
-                                            <option value="2021/2022">2021/2022</option>
-                                        </select>
+                                        <label for="bulan">Nama Siswa</label>
+                                        <input type="text" class="form-control" name="siswa" id="siswa">
                                     </div>
                                     <div class="form-group">
-                                        <label for="golongan">Golongan</label>
-                                        <select name="golongan" id="golongan" class="form-control">
-                                            <option value="1">Golongan 1</option>
-                                            <option value="2">Golongan 2</option>
-                                            <option value="3">Golongan 3</option>
-                                            <option value="4">Golongan 4</option>
-                                        </select>
+                                        <label for="tahun" class="form-label">NIS</label>
+                                        <input type="number" name="nis" id="nis" max="9999999999" class="form-control" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="nominal">Nominal</label>
-                                        <input type="number" class="form-control" name="nominal">
+                                        <label for="nominal">Kelas</label>
+                                        <input type="text" class="form-control" name="kelas">
                                     </div>
-                                    <button type="submit" class="btn btn-primary" name="tambah_spp">Tambah SPP</button>
+                                    <div class="form-group">
+                                        <label for="id_spp">Id Spp</label>
+                                        <input type="number" class="form-control" name="id_spp" id="id_spp">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" name="tambah_siswa">Tambah Siswa</button>
                                 </form>
                             </div>
                         </div>

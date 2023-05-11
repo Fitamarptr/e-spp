@@ -8,9 +8,8 @@ namespace Service {
     interface SppService
     {
         function showSpp(): array;
-        function addSpp(int $spp, string $bulan, string $status): void;
+        function addSpp(int $spp,string $tahun, int $golongan): void;
         function removeSpp(int $number): bool;
-
 
     }
 
@@ -26,19 +25,15 @@ namespace Service {
         public function showSpp(): array
         {
             $sppList = $this->sppRepository->findAll();
-           // foreach ($sppList as $number => $spp) {
-           //     $number += 1;
-            //    echo "$number. " . $spp->getSpp() . ", " . $spp->getBulan() . ", " . $spp->getStatus() . PHP_EOL;
-           // }
 
             return $sppList;
         }
 
-        public function addSpp(int $spp, string $bulan, string $status): void
+        public function addSpp(int $spp, string $tahun, int $golongan): void
         {
             $newSpp = new Spp($spp);
-            $newSpp->setBulan($bulan);
-            $newSpp->setStatus($status);
+            $newSpp->setTahun($tahun);
+            $newSpp->setGolongan($golongan);
             $this->sppRepository->save($newSpp);
         }
 
@@ -46,53 +41,24 @@ namespace Service {
         {
             return $this->sppRepository->remove($number);
         }
-
-        public function updateSpp(array $data): bool
+        public function updateSpp(int $id, string $spp, string $tahun, string $golongan): bool
         {
-            $spp = new Spp($data['spp']);
-            $spp->setID($data['id']);
-            $spp->setBulan($data['bulan']);
-            $spp->setStatus($data['status']);
-            return $this->sppRepository->updateSpp($spp);
+            $updatedSpp = new Spp($spp);
+            $updatedSpp->setId($id);
+            $updatedSpp->setTahun($tahun);
+            $updatedSpp->setGolongan($golongan);
+
+            return $this->sppRepository->update($updatedSpp);
         }
 
 
-//        public function findSppById(int $id): ?array
-//        {
-//            $spp = $this->sppRepository->findById($id);
-//
-//            if (!$spp) {
-//                return null;
-//            }
-//
-//            return [
-//                'id_spp' => $spp->getId(),
-//                'spp' => $spp->getSpp(),
-//                'bulan' => $spp->getBulan(),
-//                'status' => $spp->getStatus(),
-//            ];
-//        }
+        public function getSppById(int $id): ?Spp
+        {
+            $spp = $this->sppRepository->findById($id);
+            return $spp;
+        }
 
 
-
-
-//        public function getSppById(int $id): ?Spp
-//        {
-//            return $this->sppRepository->findById($id);
-//        }
-//
-//
-//        public function updateSpp(int $id, string $spp, string $bulan, string $status): void
-//        {
-//            $existingSpp = $this->sppRepository->findById($id);
-//            if ($existingSpp) {
-//                $updatedSpp = new Spp($id, $spp, $bulan, $status);
-//                $this->sppRepository->update($id, $updatedSpp);
-//                echo "SUKSES MENGEDIT Spp" . PHP_EOL;
-//            } else {
-//                echo "GAGAL MENGEDIT Spp: Spp tidak ditemukan" . PHP_EOL;
-//            }
-//        }
 
 
     }

@@ -19,7 +19,6 @@ function testShowSpp(): void
     $sppService = new SppServiceImpl($sppRepository);
     $sppService->showSpp();
 
-    $sppList = $sppService->showSpp();
 
 }
 
@@ -29,9 +28,8 @@ function testAddSpp(): void
     $sppRepository = new SppRepositoryImpl($connection);
 
     $sppService = new SppServiceImpl($sppRepository);
-    $sppService->addSpp(150000, "Januari", "Terbayar");
-    $sppService->addSpp(130000, "Febuari", "Terbayar");
-    $sppService->addSpp(120000, "Januari", "Tidak Terbayar");
+    $sppService->addSpp(150000, "Januari", 2022);
+
 
     $sppService->showSpp();
 }
@@ -42,9 +40,6 @@ function testRemoveSpp(): void
     $sppRepository = new SppRepositoryImpl($connection);
 
     $sppService = new SppServiceImpl($sppRepository);
-//    $sppService->addSpp(150000, "Januari", "Terbayar");
-//    $sppService->addSpp(130000, "Febuari", "Terbayar");
-//    $sppService->addSpp(120000, "Januari", "Tidak Terbayar");
 
     $sppService->showSpp();
 
@@ -61,4 +56,4 @@ function testRemoveSpp(): void
 //    $sppService->showSpp();
 }
 
-testShowSpp();
+testAddSpp();

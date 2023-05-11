@@ -1,8 +1,12 @@
 <?php
 session_start();
 
+include '../connect.php';
 
-$user = $_SESSION['user'];
+$username = $_SESSION['username'];
+
+$user = mysqli_query($koneksi, "SELECT * FROM user WHERE username='$username'");
+$user = mysqli_fetch_assoc($user);
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +20,7 @@ $user = $_SESSION['user'];
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>E-SPP <?php echo $_SESSION['user']['role']; ?></title>
+    <title>E-SPP <?php echo $_SESSION['role']; ?></title>
 
     <!-- Custom fonts for this template-->
     <link href="../assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

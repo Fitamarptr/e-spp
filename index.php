@@ -1,113 +1,108 @@
-<?php
-session_start();
-
-// Data user
-$users = [
-    [
-        'username' => 'admin',
-        'password' => 'password',
-        'role' => 'admin',
-        'redirect' => 'View/dashboard.php'
-    ],
-    [
-        'username' => 'staff',
-        'password' => 'password',
-        'role' => 'staff',
-        'redirect' => 'View/dashboard.php'
-    ],
-    [
-        'username' => 'fazry',
-        'password' => 'password',
-        'role' => 'user',
-        'redirect' => 'View/pembayaranSiswa.php'
-    ]
-];
-
-// Jika form login disubmit
-if (isset($_POST['login'])) {
-    // Validasi input
-    $errors = [];
-    if (empty($_POST['username'])) {
-        $errors[] = 'Username harus diisi';
-    }
-    if (empty($_POST['password'])) {
-        $errors[] = 'Password harus diisi';
-    }
-
-    // Jika tidak ada error, cek apakah user terdaftar
-    if (empty($errors)) {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-
-        foreach ($users as $user) {
-            if ($user['username'] == $username && $user['password'] == $password) {
-                // User terdaftar, simpan data user ke session
-                $_SESSION['user'] = $user;
-                // Redirect ke halaman sesuai role
-                header('Location: ' . $user['redirect']);
-                exit;
-            }
-        }
-
-        // User tidak terdaftar
-        $errors[] = 'Username atau password salah';
-    }
-}
-
-?>
-
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>Login</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="login.css">
-</head>
-<body>
+  <head>
 
-<?php if (!empty($errors)): ?>
-        <div style="color: red;">
-            <?php foreach ($errors as $error): ?>
-                <p><?= $error ?></p>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-    <form action="" method="post">
-        <div class="section">
-            <div class="container">
-                <div class="row full-height justify-content-center">
-                    <div class="col-12 text-center align-self-center py-5">
-                        <div class="section pb-5 pt-5 pt-sm-2 text-center">
-                            <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
-                            <div class="card-3d-wrap mx-auto">
-                                <div class="card-3d-wrapper">
-                                    <div class="card-front">
-                                        <div class="center-wrap">
-                                            <div class="section text-center">
-                                                <h4 class="mb-4 pb-3">Log In</h4>
-                                                <div class="form-group">
-                                                    <input type="username" class="form-style" placeholder="username"  name="username">
-                                                    <i class="input-icon uil uil-at"></i>
-                                                </div>	
-                                                <div class="form-group mt-2">
-                                                    <input type="password" class="form-style" placeholder="Password" name="password">
-                                                    <i class="input-icon uil uil-lock-alt"></i>
-                                                </div>
-                                                <button class="btn mt-4" type="submit" name="login">Login</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Masuk &mdash; Web Pembayaran SPP</title>
+
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/fontawesome-free/css/all.css">
+
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+
+</head>
+<body class="bg-prymary">
+
+    <?php 
+    if(isset($_GET['pesan'])){
+        if($_GET['pesan']=="gagal"){
+            echo "<div class='alert alert-primary alert-dismissible fade show' role='alert'>
+                        <strong>Perhatian!</strong> Mohon Cek Kembali Username dan Password Anda.
+                        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                        <span aria-hidden='true'>&times;</span>
+                        </button>
+                    </div>";
+        }
+        if($_GET['pesan']=="belummasuk"){
+            echo "<div class='alert alert-primary alert-dismissible fade show' role='alert'>
+                        <strong>Perhatian!</strong> Username dan Password Anda Belum Terdaftar                                        					                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                        <span aria-hidden='true'>&times;</span>
+                        </button>
+                    </div>";
+        }
+    }
+    ?>
+
+<body>
+  <div id="app">
+    <section class="section">
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
+            <div class="login-brand">
+              <img src="img/avatar/avatar-1.png" alt="logo" width="100" class="shadow-light rounded-circle">
             </div>
+
+            <div class="card card-info">
+              <div class="card-header"><h4>Silahkan Masuk</h4></div>
+
+              <div class="card-body">
+               <form action="auth.php" method="post">
+      		 			<div class="form-group">
+      		 				<label>Username</label>
+      		 				<div class="input-group">
+      		 					<div class="input-group-prepend">
+      		 						<div class="input-group-text"><i class="fas fa-user"></i></div>
+      		 					</div>
+      		 				<input type="text" name="username" class="form-control" placeholder="Username" required="required">
+      		 				</div>
+      		 			</div>
+
+               <div class="form-group">
+         				<label>Password</label>
+         				<div class="input-group">
+         					<div class="input-group-prepend">
+         						<div class="input-group-text"><i class="fas fa-lock"></i></div>
+        		 					</div>
+        		 				<input type="password" name="password" class="form-control" placeholder="Password" required="required">
+        		 			</div>
+        		 		</div>
+
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                      Login
+                    </button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+            </div>
+          </div>
         </div>
-    </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="bootstrap/jquery-3.3.1.min.js"></script>
+  <script src="bootstrap/popper.min.js"></script>
+  <script src="bootstrap/bootstrap.min.js"></script>
+  <script src="bootstrap/jquery.nicescroll.min.js"></script>
+  <script src="bootstrap/moment.min.js"></script>
+  <script src="bootstrap/stisla.js"></script>
+
+  <!-- Template JS File -->
+  <script src="bootstrap/scripts.js"></script>
+  <script src="bootstrap/custom.js"></script>
+
+  <!-- Page Specific JS File -->
+  <script src="bootstrap/page/index.js"></script>
+
+  <!-- Page Specific JS File -->
 </body>
 </html>

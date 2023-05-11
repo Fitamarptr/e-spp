@@ -98,7 +98,9 @@ $sppList = $sppService->showSpp();
                                         <th>Nominal</th>
                                         <th>Tahun Ajaran</th>
                                         <th>Golongan</th>
+                                        <?php if ($_SESSION['role'] == 'admin') { ?>
                                         <th>Action</th>
+                                        <?php } ?>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -121,6 +123,7 @@ $sppList = $sppService->showSpp();
                                             <td><?php echo $spp->getSpp() ?></td>
                                             <td><?php echo $spp->getTahun() ?></td>
                                             <td><?php echo $spp->getGolongan() ?></td>
+                                            <?php if ($_SESSION['role'] == 'admin') { ?>
                                             <td>
                                                 <form method="POST" action="removeSpp.php" style="display: inline-block">
                                                     <button class="btn btn-danger" name ="delete" onclick="return confirm('Anda yakin akan menghapus data siswa ini?')"><i class="fas fa-trash"></i> Hapus</button>
@@ -131,6 +134,7 @@ $sppList = $sppService->showSpp();
                                                     <input type="hidden" name="id" value="<?php echo $spp->getId(); ?>">
                                                 </form>
                                             </td>
+                                            <?php } ?>
                                         </tr>
                                     <?php } ?>
                                     </tbody>

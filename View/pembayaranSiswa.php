@@ -6,9 +6,6 @@ require_once __DIR__ . '/../Config/Database.php';
 require_once __DIR__ . '/../Repository/TagihanRepository.php';
 require_once __DIR__ . '/../Service/TagihanService.php';
 
-if (!isset($_SESSION['user'])) {
-    header("Location: ../login.php");
-}
 
 
 
@@ -43,7 +40,7 @@ if (isset($_POST['submit_bayar'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>E-SPP - <?php echo $_SESSION['user']['role']; ?></title>
+    <title>E-SPP - <?php echo $_SESSION['role']; ?></title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
     <!-- Bootstrap icons-->
@@ -91,6 +88,7 @@ if (isset($_POST['submit_bayar'])) {
                             <p>Kelas: <?php echo $tagihan->getKelas() ?></p>
                             <p>SPP: <?php echo $tagihan->getSpp() ?></p>
                             <p>Golongan: <?php echo $tagihan->getGolongan() ?></p>
+                            <p>Status: <?php echo $tagihan->getStatus() ?></p>
                             <?php if ($tagihan->getStatus() == "Tidak Terbayar") { ?>
                                 <form method="POST" action="">
                                     <input type="hidden" name="tagihan" value="<?php echo $tagihan->getIdTagihan() ?>">

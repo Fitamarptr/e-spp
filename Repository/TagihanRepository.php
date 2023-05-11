@@ -12,6 +12,8 @@ Namespace Repository {
         public function findAll(): array;
 
         public function remove(int $id_tagihan): bool;
+        
+        public function findTagihanByNoTagihan(string $tagihan): ?Tagihan;
     }
 
 

@@ -16,6 +16,8 @@ Namespace Repository {
         public function update(Siswa $siswa): bool;
 
         public function findById(int $id): ?Siswa;
+        
+        public function findByIdSpp(int $idSpp): array;
     }
 
 
@@ -30,17 +32,6 @@ Namespace Repository {
         {
             $this->connection = $connection;
         }
-
-
-//        public function add(Siswa $siswa): void
-//        {
-//            $this->siswa[] = $siswa ;
-//
-//
-//            $sql = "INSERT INTO siswa(siswa,nis,kelas,id_spp) VALUES (?,?,?,?)";
-//            $statement = $this->connection->prepare($sql);
-//            $statement->execute([$siswa->getSiswa(), $siswa->getNis(), $siswa->getKelas(), $siswa->getIdSpp()]);
-//        }
 
         public function add(Siswa $siswa): void
         {

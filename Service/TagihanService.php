@@ -8,8 +8,14 @@ use Repository\TagihanRepository;
 
     interface TagihanService {
         public function addTagihan(string $tagihan,int $id_siswa, int $id_spp): void;
+        
         public function showTagihan(): array;
+        
         public function removeTagihan(int $id_tagihan): bool;
+        
+        public function bayarTagihan(string $tagihan): void;
+        
+        public function showTagihanByNoTagihan(string $noTagihan): ?Tagihan;
     }
 
     class TagihanServiceImpl implements TagihanService

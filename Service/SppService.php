@@ -15,7 +15,7 @@ namespace Service {
         
         public function updateSpp(int $id, string $spp, string $tahun, string $golongan): bool;
         
-         public function getSppById(int $id): ?Spp
+         public function getSppById(int $id): ?Spp;
 
     }
 
